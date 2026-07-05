@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#F5F0E6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>CYPHR TOOLKIT · ATELIER v18.0</title>
+<title>CYPHR TOOLKIT · ATELIER v18.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -367,6 +367,11 @@ html{scroll-behavior:smooth}
 #exm .exma{display:flex;gap:10px}
 #exm .exma .btn{flex:1}
 
+/* — Heat map methods need more room than default table — */
+#htOut .th,#htOut .r{grid-template-columns:42px 1.8fr 1fr 60px}
+#htOut .r .lb{white-space:normal;line-height:1.35}
+.hd .ic.on{border-color:var(--ac2);color:var(--ac);background:var(--ac3)}
+@media(max-width:400px){#htOut .th,#htOut .r{grid-template-columns:0 1.6fr auto 0}}
 /* — Heat map / Alert / Backtest — */
 .heatrow{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line2)}
 .heatrow .hr-px{font-family:var(--m);font-weight:600;font-size:15px;min-width:96px;color:var(--ink)}
@@ -410,7 +415,7 @@ html{scroll-behavior:smooth}
 <body>
 <div id="sp">
 <div class="bb"><svg width="96" height="60" viewBox="0 0 16 10" shape-rendering="crispEdges"><g fill="#1F1B16"><rect x="4" y="0" width="2" height="1"/><rect x="10" y="0" width="2" height="1"/><rect x="3" y="1" width="4" height="1"/><rect x="9" y="1" width="4" height="1"/><rect x="2" y="2" width="5" height="1"/><rect x="9" y="2" width="5" height="1"/><rect x="1" y="3" width="14" height="1"/><rect x="0" y="4" width="16" height="1"/><rect x="0" y="5" width="3" height="1"/><rect x="5" y="5" width="6" height="1"/><rect x="13" y="5" width="3" height="1"/><rect x="0" y="6" width="1" height="1"/><rect x="6" y="6" width="4" height="1"/><rect x="15" y="6" width="1" height="1"/><rect x="7" y="7" width="2" height="1"/><rect x="6" y="8" width="4" height="1"/><rect x="7" y="9" width="2" height="1"/></g></svg></div>
-<div class="wm"><span class="rgb">Cyphr</span><small>Toolkit · Atelier · v18.0</small></div>
+<div class="wm"><span class="rgb">Cyphr</span><small>Toolkit · Atelier · v18.1</small></div>
 <div class="bar"></div>
 <div class="bt"><b>Loading</b> · Initializing modules</div>
 </div>
@@ -535,7 +540,7 @@ function go(m){if(!MODS.includes(m))return;CUR=m;$$('.pg').forEach(p=>p.classLis
 function toggleAdv(){document.body.classList.toggle('adv-on');const on=document.body.classList.contains('adv-on');localStorage.setItem('cy_adv',on?'1':'0');showToast(on?'Advanced mode ON':'Advanced mode OFF')}
 if(localStorage.getItem('cy_adv')==='1')document.body.classList.add('adv-on');
 // App theme (Atelier / Noir) — mirrors the export-card theme system
-function applyTheme(t,anim){const noir=t==='noir';const R=document.documentElement;if(anim){R.classList.add('theme-anim');clearTimeout(applyTheme._t);applyTheme._t=setTimeout(()=>R.classList.remove('theme-anim'),520)}R.classList.toggle('noir',noir);const mc=document.querySelector('meta[name=theme-color]');if(mc)mc.setAttribute('content',noir?'#14110D':'#F5F0E6');const sb=document.querySelector('meta[name=apple-mobile-web-app-status-bar-style]');if(sb)sb.setAttribute('content',noir?'black-translucent':'default');const b=$('#thmb');if(b){b.textContent=noir?'☾':'◐';b.title='Theme · '+(noir?'Noir (tap for Atelier)':'Atelier (tap for Noir)')}}
+function applyTheme(t,anim){const noir=t==='noir';const R=document.documentElement;if(anim){R.classList.add('theme-anim');clearTimeout(applyTheme._t);applyTheme._t=setTimeout(()=>R.classList.remove('theme-anim'),520)}R.classList.toggle('noir',noir);const mc=document.querySelector('meta[name=theme-color]');if(mc)mc.setAttribute('content',noir?'#14110D':'#F5F0E6');const sb=document.querySelector('meta[name=apple-mobile-web-app-status-bar-style]');if(sb)sb.setAttribute('content',noir?'black-translucent':'default');const b=$('#thmb');if(b){b.textContent=noir?'◑':'◐';b.classList.toggle('on',noir);b.title='Theme · '+(noir?'Noir (tap for Atelier)':'Atelier (tap for Noir)')}}
 let CY_THEME=localStorage.getItem('cy_theme')||'atelier';applyTheme(CY_THEME,false);
 function toggleTheme(){CY_THEME=CY_THEME==='noir'?'atelier':'noir';localStorage.setItem('cy_theme',CY_THEME);applyTheme(CY_THEME,true);showToast(CY_THEME==='noir'?'Noir theme':'Atelier theme')}
 // History — defensive parse (corrupt data from prior versions would otherwise halt script)
