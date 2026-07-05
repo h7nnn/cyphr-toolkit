@@ -1,0 +1,30 @@
+# ============================================================
+# Cyphr — Netlify deployment config
+# Deploy: connect this folder as the site root (publish = ".").
+# API routes are served by Netlify Functions v2 (see netlify/functions).
+# Set environment variables in Netlify UI:
+#   TG_BOT_TOKEN, TG_CHAT_ID, DISCORD_WEBHOOK (optional, for alerts)
+# Persistent alert rules use Netlify Blobs (no setup needed).
+# ============================================================
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Scheduled monitor (price-rule alerts) runs every 5 minutes.
+[functions."cron-alerts"]
+  schedule = "*/5 * * * *"
+
+# Long cache for the static shell; HTML always revalidated.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
