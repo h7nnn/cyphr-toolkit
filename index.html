@@ -214,6 +214,135 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .adv-only{display:none}
 body.adv-on .adv-only{display:block;animation:fd .3s ease-out}
 body.adv-on #advb{border-color:var(--ac);color:var(--ac);background:var(--ac3)}
+
+/* ============================================================
+   ATELIER REFINEMENT LAYER — v18.1
+   World-class polish: texture, depth, motion, focus, rhythm.
+   Pure CSS override — zero markup / JS changes.
+   ============================================================ */
+
+/* — Motion system — */
+:root{--ease-out:cubic-bezier(.22,1,.36,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);--sh:0 1px 1px rgba(60,48,32,.04),0 2px 6px rgba(60,48,32,.05),0 8px 24px rgba(60,48,32,.06);--sh2:0 2px 6px rgba(60,48,32,.08),0 12px 32px rgba(60,48,32,.14),0 32px 80px rgba(60,48,32,.14)}
+@keyframes fd{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes rin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes spIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+
+/* — Paper grain + vignette (tactile print feel) — */
+body::after{background:radial-gradient(60vmax 50vmax at 85% -5%,rgba(204,120,92,.07),transparent 60%),radial-gradient(50vmax 50vmax at 5% 100%,rgba(168,133,74,.06),transparent 60%),radial-gradient(120vmax 90vmax at 50% 50%,transparent 60%,rgba(60,48,32,.045) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.028'/%3E%3C/svg%3E")}
+
+/* — Splash: staged entrance — */
+#sp .bb{animation:spIn .7s var(--ease-out) both}
+#sp .wm{animation:spIn .7s var(--ease-out) .12s both}
+#sp .bar{animation:spIn .7s var(--ease-out) .22s both}
+#sp .bt{animation:spIn .7s var(--ease-out) .3s both}
+#sp .bar{height:3px}
+#sp .bar::after{background:linear-gradient(90deg,transparent,var(--gold),var(--ac),transparent);width:55%}
+
+/* — Header: crisper glass, hairline sheen — */
+.hd{background:rgba(247,243,234,.78);backdrop-filter:blur(18px) saturate(1.25);-webkit-backdrop-filter:blur(18px) saturate(1.25);box-shadow:0 1px 0 var(--hi) inset,0 1px 2px rgba(60,48,32,.04)}
+.hd .ic{transition:border-color .18s var(--ease-out),color .18s var(--ease-out),background .18s var(--ease-out),transform .18s var(--ease-spring),box-shadow .18s var(--ease-out)}
+.hd .ic:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(204,120,92,.18)}
+.hd .ic:active{transform:translateY(0) scale(.94)}
+.hd .mb{box-shadow:0 1px 0 var(--hi) inset}
+.hd .mb.lv b{position:relative}
+
+/* — Nav: smoother rail, indicator glow, hover slide — */
+.nv .it{transition:color .16s var(--ease-out),background .16s var(--ease-out),transform .2s var(--ease-out),box-shadow .2s var(--ease-out)}
+.nv .it:hover{transform:translateX(2px)}
+.nv .it.on{box-shadow:0 1px 0 var(--hi) inset,var(--sh)}
+.nv .it.on::before{box-shadow:0 0 10px 1px var(--ac4);transition:height .25s var(--ease-spring)}
+.nv .it:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.nv{scrollbar-width:thin;scrollbar-color:var(--bd2) transparent}
+
+/* — Page transitions: gentle rise + settle — */
+.pg.on{animation:fd .5s var(--ease-out)}
+.pgh .tit{text-wrap:balance}
+.pgh{position:relative}
+.pgh::after{content:'';position:absolute;left:0;bottom:-1px;width:64px;height:2px;background:linear-gradient(90deg,var(--ac),transparent);border-radius:2px}
+
+/* — Cards: layered elevation, inner highlight, hover lift — */
+.cd,.tbl,.ld{box-shadow:0 1px 0 var(--hi) inset,var(--sh);transition:box-shadow .25s var(--ease-out),transform .25s var(--ease-out),border-color .25s var(--ease-out)}
+.cd:hover,.tbl:hover,.ld:hover{box-shadow:0 1px 0 var(--hi) inset,0 2px 4px rgba(60,48,32,.05),0 10px 28px rgba(60,48,32,.09),0 24px 56px rgba(60,48,32,.07);border-color:var(--bd2)}
+.cd::before{content:'';position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,transparent,var(--hi) 30%,var(--hi) 70%,transparent);pointer-events:none}
+.cd h4{position:relative;padding-bottom:14px;margin-bottom:16px}
+.cd h4::after{content:'';position:absolute;left:0;bottom:0;right:0;height:1px;background:linear-gradient(90deg,var(--bd),transparent)}
+
+/* — Inputs: soft inset, animated ring, hover cue — */
+.fl input,.fl select,.fl textarea{box-shadow:inset 0 1px 2px rgba(60,48,32,.05);transition:border-color .18s var(--ease-out),background .18s var(--ease-out),box-shadow .22s var(--ease-out)}
+.fl input:hover:not(:focus),.fl select:hover:not(:focus),.fl textarea:hover:not(:focus){border-color:var(--bd3)}
+.fl input:focus,.fl select:focus,.fl textarea:focus{box-shadow:inset 0 1px 2px rgba(60,48,32,.03),0 0 0 4px var(--ac3),0 2px 12px rgba(204,120,92,.10)}
+.fl label{transition:color .15s}
+.fl:focus-within label{color:var(--ac)}
+
+/* — Buttons: press physics + primary sheen — */
+.btn{transition:border-color .16s var(--ease-out),background .16s var(--ease-out),color .16s var(--ease-out),transform .18s var(--ease-spring),box-shadow .2s var(--ease-out);position:relative;overflow:hidden}
+.btn:hover{transform:translateY(-1.5px);box-shadow:0 4px 14px rgba(60,48,32,.10)}
+.btn:active{transform:translateY(0) scale(.97);box-shadow:0 1px 4px rgba(60,48,32,.08);transition-duration:.06s}
+.btn.pr{background:linear-gradient(180deg,#D68268,var(--ac) 55%,var(--ac2));text-shadow:0 1px 1px rgba(0,0,0,.12);box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 2px 10px var(--ac4)}
+.btn.pr:hover{background:linear-gradient(180deg,#DA8A70,var(--ac));box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 6px 18px var(--ac4)}
+.btn.pr::after{content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);transition:left .55s var(--ease-out)}
+.btn.pr:hover::after{left:135%}
+.btn:focus-visible,.ch:focus-visible,.hd .ic:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+
+.btn.sm{flex:0 0 auto;white-space:nowrap}
+
+/* — Chips: springy toggle — */
+.ch{transition:border-color .15s var(--ease-out),color .15s var(--ease-out),background .15s var(--ease-out),transform .18s var(--ease-spring),box-shadow .18s var(--ease-out)}
+.ch:hover{transform:translateY(-1px)}
+.ch:active{transform:scale(.95)}
+.ch.on{box-shadow:0 2px 8px var(--ac4)}
+
+/* — Tables: refined rows, copy affordance — */
+.tbl .tbh{background:linear-gradient(180deg,var(--glass3),var(--glass))}
+.tbl .r{transition:background .15s var(--ease-out),border-left-color .15s}
+.tbl .r:hover{background:var(--glass3)}
+.tbl .r .vl{border-radius:6px;padding:2px 6px;margin:-2px -6px}
+.tbl .r .vl:hover{background:var(--ac3)}
+.tbl .r .vl:active{transform:scale(.97)}
+.tbl .r.cG,.tbl .r.cf{position:relative}
+
+/* — Quick-calc tiles: lively — */
+.qc .qct{transition:transform .2s var(--ease-spring),box-shadow .2s var(--ease-out),border-color .2s;box-shadow:0 1px 0 var(--hi) inset}
+.qc .qct:hover{transform:translateY(-2px);box-shadow:0 1px 0 var(--hi) inset,0 6px 16px rgba(60,48,32,.10)}
+.qc .qct.qp{box-shadow:0 1px 0 var(--hi) inset,0 2px 10px rgba(168,133,74,.16)}
+
+/* — Watchlist rows — */
+.wl .wli{transition:background .14s var(--ease-out)}
+.wl .wli .px,.wl .wli .lv{transition:transform .15s var(--ease-spring)}
+.wl .wli .px:active,.wl .wli .lv:active{transform:scale(.94)}
+.wl .wli .x{transition:color .14s,background .14s,transform .16s var(--ease-spring)}
+.wl .wli .x:hover{transform:scale(1.12)}
+
+/* — Command palette & history: deeper elevation, glassy edge — */
+#pl{box-shadow:0 0 0 1px rgba(60,48,32,.04),var(--sh2),0 60px 120px rgba(60,48,32,.18);transition:opacity .26s var(--ease-out),visibility .26s,transform .26s var(--ease-spring)}
+#pl .it{transition:background .12s var(--ease-out)}
+#pl .it:hover,#pl .it.sel{box-shadow:inset 3px 0 0 var(--ac)}
+#hp{box-shadow:-8px 0 40px rgba(60,48,32,.14);transition:right .4s var(--ease-out)}
+#hp .hi{transition:background .14s var(--ease-out),padding-left .18s var(--ease-out)}
+#hp .hi:hover{padding-left:26px}
+
+/* — Toast: confident, lifted — */
+#tst{box-shadow:0 8px 28px rgba(31,27,22,.30),0 2px 8px rgba(31,27,22,.20);transition:opacity .3s var(--ease-out),visibility .3s,transform .35s var(--ease-spring)}
+
+/* — Notes & tips: refined edge — */
+.hn,.tip{box-shadow:0 1px 0 var(--hi) inset}
+.em{transition:border-color .2s,color .2s}
+
+/* — Footer hairline sheen — */
+.ft{box-shadow:0 -1px 2px rgba(60,48,32,.03),0 1px 0 var(--hi) inset;background:rgba(247,243,234,.78);backdrop-filter:blur(18px) saturate(1.25);-webkit-backdrop-filter:blur(18px) saturate(1.25)}
+
+/* — Selection, scrollbar, smoothness — */
+html{scroll-behavior:smooth}
+.mn{scrollbar-width:thin;scrollbar-color:var(--bd2) transparent;scroll-behavior:smooth}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--bd2),var(--bd3))}
+
+/* — Ladder charts: crisper strokes on hover — */
+.ld svg .lv{transition:stroke-width .15s}
+.ld svg:hover .lv.cG,.ld svg:hover .lv.cf{stroke-width:2.4}
+
+/* — Touch: keep press feedback, drop hover lifts — */
+@media(hover:none) and (pointer:coarse){.cd:hover,.tbl:hover,.ld:hover,.btn:hover,.ch:hover,.qc .qct:hover{transform:none;box-shadow:0 1px 0 var(--hi) inset,var(--sh)}.btn.pr:hover{box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 2px 10px var(--ac4)}.nv .it:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){html,.mn{scroll-behavior:auto}}
 </style>
 </head>
 <body>
