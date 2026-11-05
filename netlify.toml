@@ -13,9 +13,7 @@
 [functions]
   node_bundler = "esbuild"
 
-# Scheduled monitor (price-rule alerts) runs every 5 minutes.
-[functions."cron-alerts"]
-  schedule = "*/5 * * * *"
+# Scheduled alerts are disabled until authenticated, per-user rules exist.
 
 # Long cache for the static shell; HTML always revalidated.
 [[headers]]
