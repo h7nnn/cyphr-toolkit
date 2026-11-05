@@ -1,70 +1,96 @@
 # Cyphr Toolkit
 
-> Open-Source W.D. Gann Market Geometry, Time-Price Cycle Harmonics & Real-Time Crypto/Metals PWA
+> Open-source W.D. Gann mathematical market geometry (Square of 9, time-price cycle harmonics) & real-time crypto/metals analytics PWA.
 
-Live Production: https://cyphr-toolkit.vercel.app
-
----
-
-## Why Cyphr Toolkit Exists (Ecosystem Gap)
-
-In retail and quantitative technical analysis, non-linear market geometry tools—such as W.D. Gann Square of 9, cardinal and ordinal degree grids, price-time cycle harmonics, and cycle confluences—are typically locked inside expensive proprietary trading terminals or closed-source scripts. Independent traders, quantitative analysts, students, and developers often lack access to a transparent, auditable reference implementation.
-
-Cyphr Toolkit solves this ecosystem gap by providing a fully open-source, zero-dependency, browser-native toolkit. All calculations execute transparently on the client side without black-box logic or proprietary software lock-in.
+**[License: MIT](LICENSE)** | **[Live Demo: cyphr-toolkit.vercel.app](https://cyphr-toolkit.vercel.app)** | **[PWA Ready](manifest.webmanifest)** | **[Security Policy](SECURITY.md)** | **[PRs Welcome](CONTRIBUTING.md)**
 
 ---
 
-## Core Features & Architecture
+## Overview & Ecosystem Gap
 
-- Zero-Dependency Vanilla JS + HTML PWA: Single-page Progressive Web App architecture (`index.html`, client-side modules) with offline capabilities via Service Worker (`sw.js`) and web app manifest (`manifest.webmanifest`).
-- W.D. Gann & Cycle Calculation Suite: Built-in algorithms for Gann Square of 9, cardinal/ordinal angle grids, price-time harmonic levels, and multi-timeframe cycle confluences.
-- Live & Historical Market Aggregation: Real-time data streaming and historical price aggregation for cryptocurrencies and metals (including XAU/USD).
-- Local Storage Watchlists & Exportable Notes: Client-side local-storage state management for custom watchlists, key price levels, and downloadable research notes.
-- Hardened Serverless API Proxies: Vercel serverless proxy functions located in `functions/api/` for secure external data fetching.
+In retail and quantitative technical analysis, non-linear market geometry tools—such as W.D. Gann Square of 9, cardinal and ordinal degree grids, price-time cycle harmonics, and cycle confluences—are traditionally locked behind expensive proprietary desktop terminals or closed-source scripts. Independent traders, quantitative analysts, students, and developers often lack access to a transparent, auditable reference implementation.
 
-### Project Structure
-
-- `index.html` - single-page application and client-side modules.
-- `functions/api/` - Vercel serverless API routes.
-- `functions/_middleware.js` - API CORS policy.
-- `vercel.json` - response security headers and URL behavior.
-- `manifest.webmanifest`, `sw.js`, `icon.svg` - installable PWA assets.
-- `netlify/` and `netlify.toml` - legacy Netlify implementation retained for reference; its alert/rules functionality is disabled pending authentication.
-- `SECURITY.md` - security reporting and security-design notes.
-- `CONTRIBUTING.md` - contributor guidelines and community standards.
-- `LICENSE` - MIT License file.
+Cyphr Toolkit solves this ecosystem gap by providing a fully open-source, zero-dependency, browser-native reference implementation. All calculations execute transparently on the client side without black-box logic or proprietary software lock-in.
 
 ---
 
-## Security & Open-Source Governance
+## Core Capabilities
 
-- DOM XSS Sanitization: All dynamic user inputs and external data feeds undergo strict client-side DOM XSS sanitization before rendering.
-- HTTPS Host-Allowlisted Proxy Boundaries: Serverless proxy endpoints (`functions/api/`) enforce strict HTTPS target host allowlists to prevent SSRF and unauthorized requests.
-- Disabled Unauthenticated Routes: Legacy notification and alert routes remain disabled pending rate-limited authentication infrastructure.
-- Vulnerability Reporting Policy: Clear disclosure process documented in `SECURITY.md`.
-- Open-Source Governance: Community contribution guidelines outlined in `CONTRIBUTING.md` and standard open-source governance.
-- MIT License: Fully open-source codebase licensed under the `MIT License` (`LICENSE`).
+- **W.D. Gann & Cycle Harmonics Engine:** Square of 9 degree/angle projections, cardinal and ordinal cross levels, and time-price cycle confluence calculators.
+- **Market Data Aggregation:** Real-time and historical cryptocurrency and metals (XAUUSD) price feeds and cycle analysis.
+- **Zero-Dependency Offline-First PWA:** Built with vanilla JavaScript and HTML (`sw.js`, `manifest.webmanifest`) with zero client-side framework bloat, local-storage watchlists, and markdown/JSON note exports.
+- **Hardened Serverless Proxy Layer:** Edge/serverless proxy endpoints (`functions/api/` for Vercel and `netlify/functions/` for legacy deployments).
+
+---
+
+## Architecture & Repository Structure
+
+```
+cyphr-toolkit/
+├── index.html                  # Main PWA UI layout and component entry point
+├── sw.js                       # Offline caching Service Worker implementation
+├── manifest.webmanifest        # Progressive Web App manifest configuration
+├── functions/                  # Vercel Serverless / Edge Function API endpoints
+│   └── api/                    # Hardened proxy endpoints for external market feeds
+├── netlify/                    # Netlify legacy serverless functions
+│   └── functions/              # Proxy endpoints for legacy deployments
+├── .github/                    # GitHub workflow, issue templates, and community standards
+│   ├── ISSUE_TEMPLATE/         # Bug report and feature request templates
+│   └── pull_request_template.md# Standard pull request verification checklist
+├── CODE_OF_CONDUCT.md          # Contributor Covenant Code of Conduct
+├── CONTRIBUTING.md             # Contribution guidelines & development workflow
+├── SECURITY.md                 # Security disclosure policy and hardening details
+└── LICENSE                     # MIT Open Source License
+```
+
+---
+
+## Security & Open-Source Hardening
+
+Cyphr Toolkit incorporates comprehensive defense-in-depth protections implemented in PR #1:
+
+- **DOM XSS Escaping:** Strict escaping on all user-controlled watchlist/history strings prior to DOM insertion.
+- **Serverless Proxy Hardening:** HTTPS-only host-allowlisted proxy validation with a 2 MB response cap to mitigate SSRF and buffer exhaustion.
+- **Route Gating:** Gated unauthenticated notification/alert-rule routes pending rate-limited auth.
+- **Secrets Exclusion:** Secret exclusions maintained in `.gitignore`.
+- **Private Vulnerability Reporting:** GitHub Private Vulnerability Reporting enabled and documented in `SECURITY.md`.
+
+---
+
+## Quick Start & Local Development
+
+### Local Execution
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/h7nnn/cyphr-toolkit
+   cd cyphr-toolkit
+   ```
+
+2. **Serve locally:**
+   ```bash
+   npx serve .
+   # or using Vercel CLI
+   vercel dev
+   ```
+
+3. **Deploy to Vercel:**
+   ```bash
+   vercel --prod
+   ```
 
 ---
 
 ## Open-Source Roadmap
 
-- Extracting a standalone `@cyphr/gann-core` TypeScript/NPM package for core mathematical geometry algorithms with 100% unit test coverage.
-- Implementing property-based mathematical verification against historical market datasets.
-- Building authenticated edge alert webhooks.
+- [ ] **@cyphr/gann-core Package:** Extracting a standalone, tree-shakeable `@cyphr/gann-core` TypeScript/NPM package with 100% unit test coverage.
+- [ ] **Property-Based Verification:** Property-based mathematical verification against historical market datasets.
+- [ ] **Authenticated Edge Alerts:** Authenticated edge webhook alerts for market cycle events.
 
 ---
 
-## Run Locally
+## Contributing & License
 
-For a frontend-only preview, run a static HTTP server from the repository root:
+Contributions are welcome! See [`CONTRIBUTING.md`](CONTRIBUTING.md), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), and [`SECURITY.md`](SECURITY.md).
 
-```bash
-python -m http.server 3000
-```
-
----
-
-## Disclaimer
-
-The project is a research and educational tool, not an investment adviser, trading execution system, or guarantee of market outcomes. Calculations and external market data can be incomplete or delayed; verify important inputs independently.
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for full text.
