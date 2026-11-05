@@ -825,7 +825,7 @@ T.innerHTML='<div class="tbh"><div class="ttl">Time zones · '+fib.length+' coun
 addHist('fibtime','D='+D+' unit='+U,fib.length+' zones')}
 // Watchlist + live feed
 let WL=[];try{const _w=localStorage.getItem('cy_wl');if(_w)WL=JSON.parse(_w);if(!Array.isArray(WL))WL=[]}catch(e){console.warn('cy_wl corrupt, resetting',e);WL=[];try{localStorage.removeItem('cy_wl')}catch{}}
-let TDKEY=localStorage.getItem('cy_tdk')||'9599a89d2c15408784b45691ec0f6fbf';if(!localStorage.getItem('cy_tdk'))try{localStorage.setItem('cy_tdk',TDKEY)}catch{}
+let TDKEY=localStorage.getItem('cy_tdk')||'';
 function setTDKey(){const k=prompt('Twelve Data API key (free at twelvedata.com).\nLeave empty to clear.',TDKEY);if(k===null)return;TDKEY=k.trim();localStorage.setItem('cy_tdk',TDKEY);showToast(TDKEY?'Key saved':'Key cleared');refreshWL(true)}
 function wlAdd(){const s=$('#wlSym').value.trim().toUpperCase();const p=parseFloat($('#wlPx').value);if(!s){showToast('Enter symbol');return}if(WL.find(w=>w.s===s)){showToast(s+' already added');return}WL.push({s,p:p||0,lv:null,t:0});localStorage.setItem('cy_wl',JSON.stringify(WL));$('#wlSym').value='';$('#wlPx').value='';renderWL();refreshWL(true)}
 function wlRm(i){WL.splice(i,1);localStorage.setItem('cy_wl',JSON.stringify(WL));renderWL()}
