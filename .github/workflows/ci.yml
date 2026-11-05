@@ -28,7 +28,7 @@ jobs:
             const allFiles = Array.from(new Set([...files, ...glob]));
             allFiles.forEach(file => {
               if (fs.existsSync(file)) {
-                console.log("Validating JSON:", file);
+                console.log("Validating JSON file:", file);
                 JSON.parse(fs.readFileSync(file, "utf8"));
               }
             });
@@ -41,7 +41,7 @@ jobs:
             exit 1
           fi
 
-          if git grep -q -i "BEGIN PRIVATE KEY"; then
+          if git grep -q -i "-----BEGIN" -- ':!.github/workflows/ci.yml'; then
             echo "Error: Private key header found in tracked files"
             exit 1
           fi
@@ -54,3 +54,4 @@ jobs:
             fi
             echo "Verified $f exists and is non-empty."
           done
+ 
