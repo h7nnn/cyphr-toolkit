@@ -1,0 +1,56 @@
+name: CI & Security Checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: JavaScript Syntax Check
+        run: |
+          find . -name "*.js" -not -path "./node_modules/*" -exec node --check {} +
+
+      - name: JSON & Web Manifest Validation
+        run: |
+          node -e '
+            const fs = require("fs");
+            const files = ["manifest.webmanifest", "vercel.json"];
+            const glob = require("child_process").execSync("find . -name \"*.json\" -not -path \"./node_modules/*\"").toString().split("\n").filter(Boolean);
+            const allFiles = Array.from(new Set([...files, ...glob]));
+            allFiles.forEach(file => {
+              if (fs.existsSync(file)) {
+                console.log("Validating JSON:", file);
+                JSON.parse(fs.readFileSync(file, "utf8"));
+              }
+            });
+          '
+
+      - name: Secret & Governance Audit
+        run: |
+          if git ls-files | grep -q -E '(^|/)\.env($|\.)'; then
+            echo "Error: .env file tracked in git"
+            exit 1
+          fi
+
+          if git grep -q -i "BEGIN PRIVATE KEY"; then
+            echo "Error: Private key header found in tracked files"
+            exit 1
+          fi
+
+          FILES=("index.html" "LICENSE" "SECURITY.md" "README.md" "CONTRIBUTING.md" "CODE_OF_CONDUCT.md")
+          for f in "${FILES[@]}"; do
+            if [ ! -s "$f" ]; then
+              echo "Error: Required file $f missing or empty"
+              exit 1
+            fi
+            echo "Verified $f exists and is non-empty."
+          done
