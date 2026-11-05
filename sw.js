@@ -1,4 +1,4 @@
-const C = "cyphr-v4";
+const C = "cyphr-v2";
 self.addEventListener("install", (e) => {
   self.skipWaiting();
   e.waitUntil(caches.open(C).then((c) => c.addAll(["/", "/index.html", "/manifest.webmanifest"]).catch(() => {})));
