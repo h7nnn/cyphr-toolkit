@@ -6,4 +6,3 @@
 
 /api/*
   Cache-Control: public, max-age=15
-  Access-Control-Allow-Origin: *
