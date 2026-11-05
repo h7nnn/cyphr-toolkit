@@ -1,0 +1,14 @@
+{
+  "name": "Cyphr · Quant Vault",
+  "short_name": "Cyphr",
+  "description": "Institutional-grade crypto market scanner, Gann/astro timing, and live order-flow terminal.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#060504",
+  "theme_color": "#0A0908",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
