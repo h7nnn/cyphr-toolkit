@@ -564,7 +564,7 @@ T.innerHTML=hdr+'<div class="th"><div>#</div><div>Sample</div><div>Overshoot</di
 addHist('lost-motion',pairs.length+' samples'+(isFinite(tgt)?' · T='+PR(tgt):''),'μ='+PR(mean)+' max='+PR(max))}
 function recordHist(mod,inp,res){addHist(mod,String(inp),res||'calculated')} // legacy history alias
 const showToast=(t)=>{const x=$('#tst');x.textContent=t;x.classList.add('on');clearTimeout(showToast._t);showToast._t=setTimeout(()=>x.classList.remove('on'),1800)};
-const tbl=rows=>rows.map((r,i)=>`<div class="r ${r.cls||CCL[i%8]}" style="animation-delay:${i*22}ms"><div class="ix">${String(i+1).padStart(2,'0')}</div><div class="lb">${r.lb}</div><div class="vl" onclick="copyVal('${String(r.vl).replace(/'/g,"\\'")}')">${r.vl}</div><div class="tg">${r.tg||''}</div></div>`).join('');
+const tbl=rows=>rows.map((r,i)=>`<div class="r ${r.cls||CCL[i%8]}" style="animation-delay:${i*22}ms"><div class="ix">${String(i+1).padStart(2,'0')}</div><div class="lb">${r.lb}</div><div class="vl" onclick="copyVal('${String(r.vl).replace(/\\/g,"\\\\").replace(/'/g,"\\'")}')">${r.vl}</div><div class="tg">${r.tg||''}</div></div>`).join('');
 function copyVal(v){navigator.clipboard.writeText(String(v)).then(()=>showToast('Copied '+v)).catch(()=>showToast('Copy failed'))}
 function copyAll(id){const el=$('#'+id);if(!el)return;const rows=el.querySelectorAll('.r');if(!rows.length){showToast('Nothing to copy');return}const t=[...rows].map(r=>{const lb=r.querySelector('.lb')?.textContent||'';const vl=r.querySelector('.vl')?.textContent.replace('⎘','').trim()||'';const tg=r.querySelector('.tg')?.textContent||'';return [lb,vl,tg].filter(Boolean).join(' · ')}).join('\n');navigator.clipboard.writeText(t).then(()=>showToast('Copied '+rows.length+' rows'))}
 // Module switching
