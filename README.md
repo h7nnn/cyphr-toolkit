@@ -2,7 +2,7 @@
 
 > Open-source W.D. Gann mathematical market geometry (Square of 9, time-price cycle harmonics) & real-time crypto/metals analytics PWA.
 
-[![CI & Security Checks](actions/workflows/ci.yml/badge.svg)](actions/workflows/ci.yml) |[![CI & Security Checks](https:**[License: MIT](LICENSE)** | **[Live Demo: cyphr-toolkit.vercel.app](https://cyphr-toolkit.vercel.app)** | **[PWA Ready](manifest.webmanifest)** | **[Security Policy](SECURITY.md)** | **[PRs Welcome](CONTRIBUTING.md)**
+[![CI & Security Checks](actions/workflows/ci.yml/badge.svg)](actions/workflows/ci.yml) | [![CodeQL Security Scan](actions/workflows/codeql.yml/badge.svg)](actions/workflows/codeql.yml) | **[License: MIT](LICENSE)** | **[Live Demo: cyphr-toolkit.vercel.app](https://cyphr-toolkit.vercel.app)** | **[PWA Ready](manifest.webmanifest)** | **[Security Policy](SECURITY.md)** | **[PRs Welcome](CONTRIBUTING.md)**
 
 ---
 
@@ -14,83 +14,72 @@ Cyphr Toolkit solves this ecosystem gap by providing a fully open-source, zero-d
 
 ---
 
+## System & Security Architecture Diagram
+
+```mermaid
+flowchart TD
+    subgraph Client["Offline-First PWA Client"]
+        A["index.html UI Interface"] --> B["sw.js Service Worker Cache"]
+        A --> C["DOM XSS Sanitizer Engine"]
+        A --> D["LocalStorage Watchlist Storage"]
+    end
+    
+    subgraph Security["Vercel Edge Security Layer"]
+        E["vercel.json (HSTS, CSP, Frame-Deny Headers)"] --> F["functions/api/ (HTTPS Host-Allowlisted & 2MB-Capped Proxy)"]
+    end
+    
+    subgraph Feeds["External Market Data Feeds"]
+        G["Cryptocurrency Market APIs"]
+        H["Metals (XAU/USD) Market Feeds"]
+    end
+
+    Client --> E
+    F --> Feeds
+```
+
+---
+
 ## Core Capabilities
 
 - **W.D. Gann & Cycle Harmonics Engine:** Square of 9 degree/angle projections, cardinal and ordinal cross levels, and time-price cycle confluence calculators.
 - **Market Data Aggregation:** Real-time and historical cryptocurrency and metals (XAUUSD) price feeds and cycle analysis.
 - **Zero-Dependency Offline-First PWA:** Built with vanilla JavaScript and HTML (`sw.js`, `manifest.webmanifest`) with zero client-side framework bloat, local-storage watchlists, and markdown/JSON note exports.
-- **Hardened Serverless Proxy Layer:** Edge/serverless proxy endpoints (`functions/api/` for Vercel and `netlify/functions/` for legacy deployments).
+- **Hardened Serverless Proxy Layer:** Edge/serverless proxy endpoints (`functions/api/`) for Vercel and Netlify (`netlify/functions/api.js`) with host allowlisting and request payload limits (2MB).
 
 ---
 
-## Architecture & Repository Structure
+## Enterprise Security Architecture & Defense-in-Depth
+
+Security is integrated natively into every architectural layer of Cyphr Toolkit:
+
+- **Automated SAST Scanning:** Integrated GitHub [CodeQL SAST Workflow](.github/workflows/codeql.yml) running on `push`, `pull_request`, and weekly cron schedules to detect security vulnerabilities and static bugs.
+- **Automated Dependency Management:** Automated updates via GitHub [Dependabot Configuration](.github/dependabot.yml) monitoring GitHub Actions ecosystem dependencies weekly.
+- **Code Ownership & Guardrails:** Explicit code ownership defined in [.github/CODEOWNERS](.github/CODEOWNERS) assigning core repository paths (`*`, `/.github/`, `/functions/`) to maintainer `@h7nnn`.
+- **RFC 9116 Security Manifest:** Publicly disclosed security metadata at [.well-known/security.txt](.well-known/security.txt) standardizing vulnerability report procedures.
+- **Enterprise HTTP Security Headers:** Strict global HTTP header enforcement in [vercel.json](vercel.json) including HSTS (`Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and restrictive `Permissions-Policy`.
+- **Client-Side Data Isolation & Sanitization:** Zero external tracking, client-side DOM XSS sanitization, and strict input validation.
+
+---
+
+## Repository Structure
 
 ```
-cyphr-toolkit/
-├── index.html                  # Main PWA UI layout and component entry point
-├── sw.js                       # Offline caching Service Worker implementation
-├── manifest.webmanifest        # Progressive Web App manifest configuration
-├── functions/                  # Vercel Serverless / Edge Function API endpoints
-│   └── api/                    # Hardened proxy endpoints for external market feeds
-├── netlify/                    # Netlify legacy serverless functions
-│   └── functions/              # Proxy endpoints for legacy deployments
-├── .github/                    # GitHub workflow, issue templates, and community standards
-│   ├── ISSUE_TEMPLATE/         # Bug report and feature request templates
-│   └── pull_request_template.md# Standard pull request verification checklist
-├── CODE_OF_CONDUCT.md          # Contributor Covenant Code of Conduct
-├── CONTRIBUTING.md             # Contribution guidelines & development workflow
-├── SECURITY.md                 # Security disclosure policy and hardening details
-└── LICENSE                     # MIT Open Source License
+.
+├── .github/
+│   ├── CODEOWNERS              # Code ownership declarations
+│   ├── dependabot.yml          # Dependabot automation rules
+│   └── workflows/              # GitHub Actions CI & CodeQL SAST workflows
+├── .well-known/
+│   └── security.txt            # RFC 9116 security contact manifest
+├── functions/                  # Vercel serverless proxy functions
+├── index.html                  # Core PWA application layout & engine
+├── manifest.webmanifest        # PWA application manifest
+├── sw.js                       # Offline service worker cache engine
+└── vercel.json                 # Enterprise HTTP security header rules
 ```
 
 ---
 
-## Security & Open-Source Hardening
+## License
 
-Cyphr Toolkit incorporates comprehensive defense-in-depth protections implemented in PR #1:
-
-- **DOM XSS Escaping:** Strict escaping on all user-controlled watchlist/history strings prior to DOM insertion.
-- **Serverless Proxy Hardening:** HTTPS-only host-allowlisted proxy validation with a 2 MB response cap to mitigate SSRF and buffer exhaustion.
-- **Route Gating:** Gated unauthenticated notification/alert-rule routes pending rate-limited auth.
-- **Secrets Exclusion:** Secret exclusions maintained in `.gitignore`.
-- **Private Vulnerability Reporting:** GitHub Private Vulnerability Reporting enabled and documented in `SECURITY.md`.
-
----
-
-## Quick Start & Local Development
-
-### Local Execution
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/h7nnn/cyphr-toolkit
-   cd cyphr-toolkit
-   ```
-
-2. **Serve locally:**
-   ```bash
-   npx serve .
-   # or using Vercel CLI
-   vercel dev
-   ```
-
-3. **Deploy to Vercel:**
-   ```bash
-   vercel --prod
-   ```
-
----
-
-## Open-Source Roadmap
-
-- [ ] **@cyphr/gann-core Package:** Extracting a standalone, tree-shakeable `@cyphr/gann-core` TypeScript/NPM package with 100% unit test coverage.
-- [ ] **Property-Based Verification:** Property-based mathematical verification against historical market datasets.
-- [ ] **Authenticated Edge Alerts:** Authenticated edge webhook alerts for market cycle events.
-
----
-
-## Contributing & License
-
-Contributions are welcome! See [`CONTRIBUTING.md`](CONTRIBUTING.md), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), and [`SECURITY.md`](SECURITY.md).
-
-Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for full text.
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
