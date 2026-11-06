@@ -24,5 +24,5 @@ export default async () => {
   return json({ items: all.slice(0, 40), ts: Date.now() }, 90);
 };
 function pick(block, tag) { const m = block.match(new RegExp("<" + tag + "[^>]*>([\\s\\S]*?)</" + tag + ">", "i")); return m ? m[1] : ""; }
-const clean = (s = "") => { let prev, out = String(s || ""); do { prev = out; out = out.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]*>/g, ""); } while (out !== prev); return out.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/[<>]/g, "").trim(); };
+const clean = (s = "") => { let prev, out = String(s || ""); do { prev = out; out = out.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]*>/g, ""); } while (out !== prev); return out.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/, '"').replace(/&#39;g, "'").replace(/[<>]/g, "").trim(); };
 function json(obj, ttl) { return new Response(JSON.stringify(obj), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=" + ttl } }); }
