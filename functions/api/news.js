@@ -34,7 +34,7 @@ function pick(block, tag) {
   return m ? m[1] : "";
 }
 function clean(s) {
-let prev; let str = s; do { prev = str; str = str.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]+>/g, ""); } while (str !== prev); return str.replace(/&amp;/g, "&").trim();  return s.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").trim();
+let prev; let str = s; do { prev = str; str = str.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]+>/g, ""); } while (str !== prev); return str.replace(/&amp;/g, "&").trim();  returnlet prev, out = String(s || ""); do { prev = out; out = out.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]*>/g, ""); } while (out !== prev); return out.replace(/&amp;/g, "&").replace(/[<>]/g, "").trim(); s.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").trim();
 }
 function json(obj, ttl) {
   return new Response(JSON.stringify(obj), {
