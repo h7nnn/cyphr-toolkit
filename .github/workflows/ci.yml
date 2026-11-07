@@ -55,7 +55,7 @@ jobs:
               if (!content.includes(h)) throw new Error("Missing header: " + h);
             });
 
-            let input = "<scr<script>ipt>alert(1)</script>";
+            let input = "<<script>script>alert(1)<</script>/script>";
             let prev;
             do {
               prev = input;
