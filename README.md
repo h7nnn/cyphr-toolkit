@@ -79,6 +79,27 @@ Security is integrated natively into every architectural layer of Cyphr Toolkit:
 ```
 
 ---
+## STRIDE Threat Model Matrix
+| STRIDE Category | Threat Vector | Defense-in-Depth Mitigation | Enforced In |
+| --- | --- | --- | --- |
+| **S — Spoofing** | Cross-origin framing & clickjacking | `X-Frame-Options: DENY` and `Content-Security-Policy: frame-ancestors 'none'` | `vercel` config |
+ **T — Tampering** | Multi-pass HTML/CDATA & DOM XSS injection | Iterative `do...while` tag scrubber & backslash/quote escaping | `index` UI & API functions |
+| **R — Repudiation** | Unreviewed workflow or proxy changes | Enforced `@h7nnn` code ownership & SHA-pinned CI audit logs | `CODEOWNERS` & `ci` workflow |
+| **I — Information Disclosure** | Credential leakage or cross-origin window leaks | GitHub Secret Scanning + Push Protection, `Cross-Origin-Opener-Policy: same-origin`, `Referrer-Policy` | Repo Settings & `vercel` config |
+| **D — Denial of Service** | Oversized upstream payloads & unauthenticated alert floods | Strict 2 MB payload ceiling, timeout guards, and gated notification endpoints | Serverless API proxies |
+| **E — Elevation of Privilege** | SSRF & CI token abuse | Strict HTTPS-only host allowlisting, top-level `permissions: {}`, and 40-char SHA-pinned Actions | Serverless API & GitHub Actions |
+---
+## Edge Security & Proxy Configuration Reference
+| Control / Parameter | Configured Value | Security Purpose |
+| --- | --- | --- |
+| `Strict-Transport-Security` | `max-age=63072000; includeSubDomains; preload` | Enforces HTTPS connections across subdomains with HSTS preload listing |
+| `Content-Security-Policy` | `frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests` | Prevents framing, base tag injection, form hijacking, and upgrades insecure requests |
+| `X-Content-Type-Options` | `nosniff` | Prevents MIME-type sniffing by forcing browser to adhere to declared content types |
+| `Cross-Origin-Opener-Policy` | `same-origin` | Isolates top-level browsing context to protect against cross-origin window leaks |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | Disables risky browser features and hardware APIs for origin security |
+| `MAX_PAYLOAD_BYTES` | `2,097,152 bytes / 2 MB` | Limits maximum request body payload size to mitigate denial-of-service floods |
+| `ALLOWED_PROTOCOLS` | `HTTPS only + strict upstream host allowlist` | Restricts proxy targets to secure HTTPS endpoints and allowed hosts |
+---
 
 ## License
 
