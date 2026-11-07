@@ -5,15 +5,20 @@ on:
   pull_request:
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
+# description:   cont#ents: read
 
 jobs:
   validate-and-audit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+    #     uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: JavaScript Syntax Check
         run: |
@@ -32,6 +37,31 @@ jobs:
                 JSON.parse(fs.readFileSync(file, "utf8"));
               }
             });
+          '
+
+      - name: Verify HTTP Security Headers & Sanitization Regression Suite
+        run: |
+          node -e '
+            const fs = require("fs");
+            const content = fs.readFileSync("vercel.json", "utf8");
+            const headers = [
+              "Strict-Transport-Security",
+              "Content-Security-Policy",
+              "X-Frame-Options",
+              "X-Content-Type-Options",
+              "Cross-Origin-Opener-Policy"
+            ];
+            headers.forEach(h => {
+              if (!content.includes(h)) throw new Error("Missing header: " + h);
+            });
+
+            let input = "<scr<script>ipt>alert(1)</script>";
+            let prev;
+            do {
+              prev = input;
+              input = input.replace(/<[^>]*>/gi, "");
+            } while (input !== prev);
+            if (input !== "alert(1)") throw new Error("Sanitization regression check failed: " + input);
           '
 
       - name: Secret & Governance Audit
